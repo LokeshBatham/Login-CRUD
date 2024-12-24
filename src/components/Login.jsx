@@ -2,16 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
-
-const Login = ({profileName}) => {
-    const navigate = useNavigate()
+const Login = ({ profileName }) => {
+  const navigate = useNavigate();
   const [login, setLogin] = useState({
     ConfirmEmail: "",
     ConfirmPassword: "",
   });
   const [loginError, setLoginError] = useState("");
-  const [useName, setUserName] = useState("")
+  const [useName, setUserName] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,14 +20,13 @@ const Login = ({profileName}) => {
   const handleLogin = (e) => {
     e.preventDefault();
     const { ConfirmEmail, ConfirmPassword } = login;
-    console.log("123", login);
 
     if (ConfirmEmail == "") {
       setLoginError("Please Enter Email");
     } else if (ConfirmPassword == "") {
       setLoginError("Please Enter Password");
     } else {
-        setLoginError("")
+      setLoginError("");
       let baseUrl = "http://13.50.27.128/v1/login";
       axios
         .post(
@@ -45,18 +42,18 @@ const Login = ({profileName}) => {
           }
         )
         .then((response) => {
-            if(response.status == 200 && response.statusText == "OK"){
-                console.log(response.data.data.accessToken);
-                sessionStorage.setItem("accessToken", response.data.data.accessToken);
-                profileName(response.data.data.Name)
-                navigate("/dashboard")
-            }
-          
-          
+          if (response.status == 200 && response.statusText == "OK") {
+            sessionStorage.setItem(
+              "accessToken",
+              response.data.data.accessToken
+            );
+            profileName(response.data.data.Name);
+            navigate("/dashboard");
+          } else {
+            navigate("/");
+          }
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => {});
     }
   };
   return (
@@ -90,7 +87,6 @@ const Login = ({profileName}) => {
                 value={login.ConfirmPassword}
                 onChange={(e) => handleChange(e)}
               />
-              
             </div>
             <p className="forget">Forget Password?</p>
             {loginError && <p>{loginError}</p>}
@@ -115,14 +111,22 @@ const Login = ({profileName}) => {
           </div>
           <div className="row">
             <div className="col-12 col-sm-6 col-md-6 col-lg-6">
-              <button className="loginButton1"> <i class="bi bi-google"></i> Google</button>
+              <button className="loginButton1">
+                {" "}
+                <i class="bi bi-google"></i> Google
+              </button>
             </div>
             <div className="col-12 col-sm-6 col-md-6 col-lg-6">
-              <button className="loginButton1"> <i class="bi bi-facebook"></i> Facebook</button>
+              <button className="loginButton1">
+                {" "}
+                <i class="bi bi-facebook"></i> Facebook
+              </button>
             </div>
           </div>
           <div>
-            <p className="signup">Don't have an account? <span>Signup</span></p>
+            <p className="signup">
+              Don't have an account? <span>Signup</span>
+            </p>
           </div>
         </div>
       </div>
